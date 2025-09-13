@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">Editar Restaurante</div>
+      <div class="card-body">
+        <form action="{{ url_for('edit_restaurante', id=r['id']) }}" method="post">
+          <div class="mb-3">
+            <label class="form-label">Nome</label>
+            <input class="form-control" name="nome" value="{{ r['nome'] }}" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Categoria</label>
+            <input class="form-control" name="categoria" value="{{ r['categoria'] }}" required>
+          </div>
+          <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">Cancelar</a>
+          <button class="btn btn-primary">Salvar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

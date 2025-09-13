@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+  <div class="col-md-5">
+    <div class="card mb-3">
+      <div class="card-header">Cadastrar Restaurante</div>
+      <div class="card-body">
+        <form action="{{ url_for('add_restaurante') }}" method="post">
+          <div class="mb-3">
+            <label class="form-label">Nome</label>
+            <input class="form-control" name="nome" placeholder="Nome do restaurante" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Categoria</label>
+            <input class="form-control" name="categoria" placeholder="Ex: Fast Food, Japonês" required>
+          </div>
+          <button class="btn btn-primary">Cadastrar</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <form method="get" action="{{ url_for('index') }}" class="d-flex gap-2">
+        <select name="filtro" class="form-select">
+          <option value="todos" {% if filtro=='todos' %}selected{% endif %}>Todos</option>
+          <option value="ativos" {% if filtro=='ativos' %}selected{% endif %}>Apenas Ativos</option>
+          <option value="inativos" {% if filtro=='inativos' %}selected{% endif %}>Apenas Inativos</option>
+        </select>
+        <button class="btn btn-outline-secondary">Filtrar</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="col-md-7">
+    <div class="card">
+      <div class="card-header">Restaurantes Cadastrados</div>
+      <div class="card-body p-0">
+        <table class="table table-striped mb-0">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nome</th>
+              <th>Categoria</th>
+              <th>Status</th>
+              <th style="width:170px">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in restaurantes %}
+              <tr>
+                <td>{{ r['id'] }}</td>
+                <td>{{ r['nome'] }}</td>
+                <td>{{ r['categoria'] }}</td>
+                <td>{{ 'Ativo' if r['ativo']==1 else 'Inativo' }}</td>
+                <td>
+                  <a class="btn btn-sm btn-secondary" href="{{ url_for('edit_restaurante', id=r['id']) }}">Editar</a>
+
+                  <form action="{{ url_for('toggle_restaurante', id=r['id']) }}" method="post" style="display:inline-block">
+                    <button class="btn btn-sm btn-warning">
+                      {{ 'Desativar' if r['ativo']==1 else 'Ativar' }}
+                    </button>
+                  </form>
+
+                  <form action="{{ url_for('delete_restaurante', id=r['id']) }}" method="post" style="display:inline-block" onsubmit="return confirm('Confirma exclusão?');">
+                    <button class="btn btn-sm btn-danger">Excluir</button>
+                  </form>
+                </td>
+              </tr>
+            {% else %}
+              <tr><td colspan="5" class="text-center">Nenhum restaurante cadastrado.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
